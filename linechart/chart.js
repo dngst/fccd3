@@ -2,8 +2,8 @@ async function drawLineChart() {
   const dataset = await d3.json("../nyc_weather_data.json")
   const dateParser = d3.timeParse("%Y-%m-%d")
 
-  const yAccesor = d => d.temperatureMax
-  const xAccesor = d => dateParser(d.date)
+  const yAccessor = d => d.temperatureMax
+  const xAccessor = d => dateParser(d.date)
 
   let dimensions = {
     width: window.innerWidth * 0.9,
@@ -36,7 +36,7 @@ async function drawLineChart() {
     }px)`)
 
   const yScale = d3.scaleLinear()
-    .domain(d3.extent(dataset, yAccesor))
+    .domain(d3.extent(dataset, yAccessor))
     .range([dimensions.boundedHeight, 0])
 
   const freezingTemperaturePlacement = yScale(32)
@@ -48,19 +48,20 @@ async function drawLineChart() {
     .attr("fill", "#E0F3F3")
 
   const xScale = d3.scaleTime()
-    .domain(d3.extent(dataset, xAccesor))
+    .domain(d3.extent(dataset, xAccessor))
     .range([0, dimensions.booundedWidth])
 
   const lineGenerator = d3.line()
     .curve(d3.curveBasis)
-    .x(d => xScale(xAccesor(d)))
-    .y(d => yScale(yAccesor(d)))
+    .y(d => yScale(yAccessor(d)))
+    .x(d => xScale(xAccessor(d)))
 
   const line = bounds.append("path")
-    .attr("d", lineGenerator(dataset))
-    .attr("fill", "none")
-    .attr("stroke", "#AF9358")
-    .attr("stroke-width", 2)
+    .transition().duration(1000)
+      .attr("d", lineGenerator(dataset))
+      .attr("fill", "none")
+      .attr("stroke", "#AF9358")
+      .attr("stroke-width", 2)
 
   const yAxisGenerator = d3.axisLeft()
     .scale(yScale)
