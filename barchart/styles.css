@@ -1,0 +1,11 @@
+body {
+  font-family: sans-serif;
+}
+
+#title {
+  text-align: center;
+}
+
+.bar {
+  fill: rgb(51, 173, 255);
+}
