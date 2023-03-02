@@ -1,12 +1,17 @@
 async function drawBarChart() {
   const url = "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/GDP-data.json"
-  const dataset = await d3.json(url).then(response => {
+  const fetchedData = await d3.json(url).then(response => {
     return response.data
   })
 
+  const dataset = []
+
+  for (const row of fetchedData) {
+    dataset.push(row)
+  }
+
   const xAccessor = d => d[0]
   const yAccessor = d => d[1]
-  // const colorAccessor = d => d[]
 
   const width = 900
   let dimensions = {
@@ -39,30 +44,18 @@ async function drawBarChart() {
       dimensions.margin.top
     }px)`)
 
-  const years = []
-  const gdps = []
-  const filtredData =[]
-
-  for (const row of dataset) {
-    const year = new Date(row[0]).getFullYear()
-    filtredData.push([year, row[1]])
-    for(const either of row) {
-      years.push(year)
-      gdps.push(row[1])
-    }
-  }
-
   const colorScale = d3.scaleLinear()
     .domain(d3.extent(dataset, yAccessor))
-    .range(["#99ff99", "#004d00"])
+    .range(["#85BB65", "#2E471F"])
 
-  const xScale = d3.scaleLinear()
-    .domain(d3.extent(years))
+  const xScale = d3.scaleTime()
+    .domain(d3.extent(dataset, d => {
+      return new Date(d[0])
+    }))
     .range([0, dimensions.boundedWidth])
 
   const xAxisGenerator = d3.axisBottom()
     .scale(xScale)
-    .tickFormat(d3.format("d"))
 
   const xAxis = bounds.append("g")
     .call(xAxisGenerator)
@@ -71,7 +64,7 @@ async function drawBarChart() {
       .attr("class", "tick")
 
   const yScale = d3.scaleLinear()
-    .domain(d3.extent(gdps))
+    .domain(d3.extent(dataset, yAccessor))
     .range([dimensions.boundedHeight, 0])
     .nice()
 
@@ -90,15 +83,15 @@ async function drawBarChart() {
 
   const barRects = bounds.append("g")
     .selectAll("g")
-      .data(filtredData)
+      .data(dataset)
       .enter().append("rect")
       .on("mouseenter", onMouseEnter)
       .on("mouseleave", onMouseLeave)
       .attr("data-date", d => xAccessor(d))
       .attr("data-gdp", d => yAccessor(d))
-      .attr("x", d => xScale(xAccessor(d)))
+      .attr("x", d => xScale(new Date(xAccessor(d))))
       .attr("y", d => yScale(yAccessor(d)))
-      .attr("width", 12)
+      .attr("width", 3)
       .attr("height", d => dimensions.boundedHeight - yScale(yAccessor(d)))
       .attr("class", "bar")
       .attr("fill", d => colorScale(yAccessor(d)))
@@ -106,11 +99,24 @@ async function drawBarChart() {
   const tooltip = d3.select("#tooltip")
     .attr("class", "tooltip")
 
- function onMouseEnter(d) {
+  const dateParser = d3.timeFormat("%B %d, %Y")
+
+ function onMouseEnter() {
     d = d3.select(this).datum()
-    tooltip.select("#tooltip-text")
-      .text(`$${yAccessor(d)} Billion in ${xAccessor(d)}`)
+    tooltip
       .attr("data-date", xAccessor(d))
+    tooltip.select("#date")
+      .text(`$${yAccessor(d)} Billion`)
+    tooltip.select("#gdp")
+      .text(`${dateParser(new Date(xAccessor(d)))}`)
+
+    const x = xScale(new Date(xAccessor(d))) + dimensions.margin.left
+    const y = yScale(yAccessor(d)) + dimensions.margin.top
+
+    tooltip.style("transform", `translate(`
+      + `calc( -50% + ${x}px),`
+      + `calc(-100% + ${y}px)`
+      + `)`)
 
     tooltip.style("opacity", 1)
   }
