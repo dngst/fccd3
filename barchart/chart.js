@@ -4,6 +4,10 @@ async function drawBarChart() {
     return response.data
   })
 
+  const xAccessor = d => d[0]
+  const yAccessor = d => d[1]
+  // const colorAccessor = d => d[]
+
   const width = 900
   let dimensions = {
     width: width,
@@ -48,12 +52,17 @@ async function drawBarChart() {
     }
   }
 
+  const colorScale = d3.scaleLinear()
+    .domain(d3.extent(dataset, yAccessor))
+    .range(["#99ff99", "#004d00"])
+
   const xScale = d3.scaleLinear()
     .domain(d3.extent(years))
     .range([0, dimensions.boundedWidth])
 
   const xAxisGenerator = d3.axisBottom()
     .scale(xScale)
+    .tickFormat(d3.format("d"))
 
   const xAxis = bounds.append("g")
     .call(xAxisGenerator)
@@ -74,18 +83,41 @@ async function drawBarChart() {
       .attr("id", "y-axis")
       .attr("class", "tick")
 
-  const barPadding = 1
-  const binsGroup = bounds.append("g")
-  const barRects = binsGroup.selectAll("g")
-    .data(filtredData)
-    .enter().append("rect")
-    .attr("data-date", d => d[0])
-    .attr("data-gdp", d => d[1])
-    .attr("x", d => xScale(d[0]))
-    .attr("y", d => yScale(d[1]))
-    .attr("width", 18)
-    .attr("height", d => dimensions.boundedHeight - yScale(d[1]))
-    .attr("class", "bar")
+  const yAxisLabel = yAxis.append("text")
+    .attr("y", -dimensions.margin.left + 74)
+    .text("Gross Domestic Product")
+    .attr("class", 'yaxis-label')
+
+  const barRects = bounds.append("g")
+    .selectAll("g")
+      .data(filtredData)
+      .enter().append("rect")
+      .on("mouseenter", onMouseEnter)
+      .on("mouseleave", onMouseLeave)
+      .attr("data-date", d => xAccessor(d))
+      .attr("data-gdp", d => yAccessor(d))
+      .attr("x", d => xScale(xAccessor(d)))
+      .attr("y", d => yScale(yAccessor(d)))
+      .attr("width", 12)
+      .attr("height", d => dimensions.boundedHeight - yScale(yAccessor(d)))
+      .attr("class", "bar")
+      .attr("fill", d => colorScale(yAccessor(d)))
+
+  const tooltip = d3.select("#tooltip")
+    .attr("class", "tooltip")
+
+ function onMouseEnter(d) {
+    d = d3.select(this).datum()
+    tooltip.select("#tooltip-text")
+      .text(`$${yAccessor(d)} Billion in ${xAccessor(d)}`)
+      .attr("data-date", xAccessor(d))
+
+    tooltip.style("opacity", 1)
+  }
+
+  function onMouseLeave() {
+    tooltip.style("opacity", 0)
+  }
 }
 
 drawBarChart()
