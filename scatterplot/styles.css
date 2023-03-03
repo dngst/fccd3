@@ -1,0 +1,17 @@
+body {
+  font-family: sans-serif;
+}
+
+.yaxis-label {
+  fill: black;
+  font-size: 1.6em;
+  transform: rotate(-90deg);
+}
+
+header p {
+  margin: -1% 0 0;
+}
+
+.dot {
+  stroke: black;
+}
