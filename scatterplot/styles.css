@@ -15,3 +15,7 @@ header p {
 .dot {
   stroke: black;
 }
+
+.legend-text {
+  text-anchor: end;
+}

@@ -86,6 +86,35 @@ async function drawScatterPlot() {
       .attr("r", 6)
       .attr("fill", d => d[2]? "#7F00FF" : "#FFA500")
       .attr("class", "dot")
+
+  const legend = bounds.append("g")
+    .attr("id", "legend")
+
+  const legendEntry1 = legend.append("circle")
+      .attr("cx", 800)
+      .attr("cy", 50)
+      .attr("r", 6)
+      .attr("class", "dot")
+      .attr("fill", "#7F00FF")
+
+  const legendEntry1Text = legend.append("text")
+    .attr("class", "legend-text")
+    .text("Riders with doping allegations")
+    .attr("x", 780)
+    .attr("y", 56)
+
+  const legendEntry2 = legend.append("circle")
+      .attr("cx", 800)
+      .attr("cy", 20)
+      .attr("r", 6)
+      .attr("class", "dot")
+      .attr("fill", "#FFA500")
+
+  const legendEntry2Text = legend.append("text")
+    .attr("class", "legend-text")
+    .text("No doping allegations")
+    .attr("x", 780)
+    .attr("y", 26)
 }
 
 drawScatterPlot()
