@@ -9,7 +9,7 @@ async function drawBarChart() {
   for (const row of fetchedData) {
     dataset.push(row)
   }
-
+  console.log(dataset)
   const xAccessor = d => d[0]
   const yAccessor = d => d[1]
 
@@ -89,12 +89,15 @@ async function drawBarChart() {
       .on("mouseleave", onMouseLeave)
       .attr("data-date", d => xAccessor(d))
       .attr("data-gdp", d => yAccessor(d))
-      .attr("x", d => xScale(new Date(xAccessor(d))))
-      .attr("y", d => yScale(yAccessor(d)))
-      .attr("width", 3)
-      .attr("height", d => dimensions.boundedHeight - yScale(yAccessor(d)))
       .attr("class", "bar")
       .attr("fill", d => colorScale(yAccessor(d)))
+      .attr("width", 3)
+      .attr("height", 0)
+      .attr("y", d => yScale(0))
+      .attr("x", d => xScale(new Date(xAccessor(d))))
+      .transition().duration(2500)
+        .attr("y", d => yScale(yAccessor(d)))
+        .attr("height", d => dimensions.boundedHeight - yScale(yAccessor(d)))
 
   const tooltip = d3.select("#tooltip")
     .attr("class", "tooltip")
