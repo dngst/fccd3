@@ -9,7 +9,7 @@ async function drawBarChart() {
   for (const row of fetchedData) {
     dataset.push(row)
   }
-  console.log(dataset)
+
   const xAccessor = d => d[0]
   const yAccessor = d => d[1]
 
