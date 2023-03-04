@@ -12,7 +12,7 @@ header p {
   margin: -1% 0 0;
 }
 
-.dot {
+.dot, .legend-dot {
   stroke: black;
 }
 

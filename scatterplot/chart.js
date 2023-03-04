@@ -108,7 +108,7 @@ async function drawScatterPlot() {
       .attr("cx", 800)
       .attr("cy", 50)
       .attr("r", 6)
-      .attr("class", "dot")
+      .attr("class", "legend-dot")
       .attr("fill", "#7F00FF")
 
   const legendEntry1Text = legend.append("text")
@@ -121,7 +121,7 @@ async function drawScatterPlot() {
       .attr("cx", 800)
       .attr("cy", 20)
       .attr("r", 6)
-      .attr("class", "dot")
+      .attr("class", "legend-dot")
       .attr("fill", "#FFA500")
 
   const legendEntry2Text = legend.append("text")
