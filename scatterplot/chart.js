@@ -8,7 +8,14 @@ async function drawScatterPlot() {
 
   fetchedData.map(data => {
     const minsParser = d3.timeParse(timeFormat)
-    dataset.push([data["Year"], minsParser(data["Time"]), data["Doping"]])
+    dataset.push([
+      data["Year"],
+      minsParser(data["Time"]),
+      data["Doping"],
+      data["Name"],
+      data["Nationality"],
+      data["Time"]
+      ])
   })
 
   const xAccessor = d => d[0]
@@ -81,11 +88,18 @@ async function drawScatterPlot() {
   const dots = bounds.selectAll("circle")
     .data(dataset)
     .enter().append("circle")
-      .attr("cx", d => xScale(xAccessor(d)))
-      .attr("cy", d => yScale(yAccessor(d)))
-      .attr("r", 6)
+      .attr("cx", 0)
+      .attr("cy", 459)
       .attr("fill", d => d[2]? "#7F00FF" : "#FFA500")
       .attr("class", "dot")
+      .attr("data-yvalue", d => yAccessor(d))
+      .attr("data-xvalue", d => xAccessor(d))
+      .on("mouseenter", onMouseEnter)
+      .on("mouseleave", onMouseLeave)
+      .transition().duration(5000)
+        .attr("r", 6)
+        .attr("cy", d => yScale(yAccessor(d)))
+        .attr("cx", d => xScale(xAccessor(d)))
 
   const legend = bounds.append("g")
     .attr("id", "legend")
@@ -101,7 +115,7 @@ async function drawScatterPlot() {
     .attr("class", "legend-text")
     .text("Riders with doping allegations")
     .attr("x", 780)
-    .attr("y", 56)
+    .attr("y", 55)
 
   const legendEntry2 = legend.append("circle")
       .attr("cx", 800)
@@ -114,7 +128,35 @@ async function drawScatterPlot() {
     .attr("class", "legend-text")
     .text("No doping allegations")
     .attr("x", 780)
-    .attr("y", 26)
+    .attr("y", 25)
+
+  const tooltip = d3.select("#tooltip")
+    .attr("class", "tooltip")
+
+  function onMouseEnter() {
+    d = d3.select(this).datum()
+    tooltip.attr("data-year", xAccessor(d))
+    tooltip.select("#name_nationality")
+      .text(`${d[3]}; ${d[4]}`)
+    tooltip.select("#year_time")
+      .text(`Time: ${d[5]}, Year: ${d[0]}`)
+    tooltip.select("#doping")
+      .text(`${d[2]}`)
+
+    const x = xScale(xAccessor(d))
+    const y = yScale(yAccessor(d))
+
+    tooltip.style("transform", `translate(`
+      + `calc( 27% + ${x}px),`
+      + `calc(-70% + ${y}px)`
+      + `)`)
+
+    tooltip.style("opacity", 1)
+  }
+
+  function onMouseLeave() {
+    tooltip.style("opacity", 0)
+  }
 }
 
 drawScatterPlot()
