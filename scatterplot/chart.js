@@ -92,7 +92,7 @@ async function drawScatterPlot() {
       .attr("cy", 459)
       .attr("fill", d => d[2]? "#7F00FF" : "#FFA500")
       .attr("class", "dot")
-      .attr("data-yvalue", d => yAccessor(d))
+      .attr("data-yvalue", d => yAccessor(d).toISOString())
       .attr("data-xvalue", d => xAccessor(d))
       .on("mouseenter", onMouseEnter)
       .on("mouseleave", onMouseLeave)
