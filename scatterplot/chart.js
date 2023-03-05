@@ -69,7 +69,6 @@ async function drawScatterPlot() {
   const yScale = d3.scaleTime()
     .domain(d3.extent(dataset, yAccessor).reverse())
     .range([dimensions.boundedHeight, 0])
-    .nice()
 
   const yAxisGenerator = d3.axisLeft()
     .scale(yScale)
