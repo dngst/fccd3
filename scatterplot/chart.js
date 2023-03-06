@@ -1,25 +1,12 @@
 async function drawScatterPlot() {
   const url = "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json"
-  const fetchedData = await d3.json(url)
-
-  const dataset = []
+  const dataset = await d3.json(url)
 
   const timeFormat = d3.timeFormat("%M:%S")
+  const minsParser = d3.timeParse(timeFormat)
 
-  fetchedData.map(data => {
-    const minsParser = d3.timeParse(timeFormat)
-    dataset.push([
-      data["Year"],
-      minsParser(data["Time"]),
-      data["Doping"],
-      data["Name"],
-      data["Nationality"],
-      data["Time"]
-      ])
-  })
-
-  const xAccessor = d => d[0]
-  const yAccessor = d => d[1]
+  const xAccessor = d => d.Year
+  const yAccessor = d => minsParser(d.Time)
 
   const width = 900
   let dimensions = {
@@ -89,7 +76,7 @@ async function drawScatterPlot() {
     .enter().append("circle")
       .attr("cx", 0)
       .attr("cy", 459)
-      .attr("fill", d => d[2]? "#7F00FF" : "#FFA500")
+      .attr("fill", d => d.Doping? "#7F00FF" : "#FFA500")
       .attr("class", "dot")
       .attr("data-yvalue", d => yAccessor(d).toISOString())
       .attr("data-xvalue", d => xAccessor(d))
@@ -136,11 +123,11 @@ async function drawScatterPlot() {
     d = d3.select(this).datum()
     tooltip.attr("data-year", xAccessor(d))
     tooltip.select("#name_nationality")
-      .text(`${d[3]}; ${d[4]}`)
+      .text(`${d.Name}; ${d.Nationality}`)
     tooltip.select("#year_time")
-      .text(`Time: ${d[5]}, Year: ${d[0]}`)
+      .text(`Time: ${d.Time}, Year: ${d.Year}`)
     tooltip.select("#doping")
-      .text(`${d[2]}`)
+      .text(`${d.Doping}`)
 
     const x = xScale(xAccessor(d))
     const y = yScale(yAccessor(d))

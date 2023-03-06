@@ -1,14 +1,8 @@
 async function drawBarChart() {
   const url = "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/GDP-data.json"
-  const fetchedData = await d3.json(url).then(response => {
+  const dataset = await d3.json(url).then(response => {
     return response.data
   })
-
-  const dataset = []
-
-  for (const row of fetchedData) {
-    dataset.push(row)
-  }
 
   const xAccessor = d => d[0]
   const yAccessor = d => d[1]
