@@ -2,14 +2,25 @@ body {
   font-family: sans-serif;
 }
 
+svg {
+  margin: auto;
+  display: block;
+}
+
+header {
+  text-align: center;
+}
+
+#title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 3em;
+}
+
 .yaxis-label {
   fill: black;
   font-size: 1.6em;
   transform: rotate(-90deg);
-}
-
-header p {
-  margin: -1% 0 0;
 }
 
 .dot, .legend-dot {
@@ -32,5 +43,5 @@ header p {
 }
 
 .tooltip:before {
-    content: '';
+  content: '';
 }

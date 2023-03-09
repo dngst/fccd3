@@ -8,6 +8,9 @@ async function drawScatterPlot() {
   const xAccessor = d => d.Year
   const yAccessor = d => minsParser(d.Time)
 
+  const allegations = "#7F00FF";
+  const noAllegations = "#FFA500";
+
   const width = 900
   let dimensions = {
     width: width,
@@ -67,8 +70,8 @@ async function drawScatterPlot() {
 
   const yAxisLabel = yAxis.append("text")
     .text("Time in Minutes")
-    .attr("y", -dimensions.margin.left / 2)
-    .attr("x", -dimensions.margin.top * 2)
+    .attr("y", -dimensions.margin.bottom)
+    .attr("x", 0)
     .attr("class", "yaxis-label")
 
   const dots = bounds.selectAll("circle")
@@ -76,7 +79,7 @@ async function drawScatterPlot() {
     .enter().append("circle")
       .attr("cx", 0)
       .attr("cy", 459)
-      .attr("fill", d => d.Doping? "#7F00FF" : "#FFA500")
+      .attr("fill", d => d.Doping? allegations : noAllegations)
       .attr("class", "dot")
       .attr("data-yvalue", d => yAccessor(d).toISOString())
       .attr("data-xvalue", d => xAccessor(d))
@@ -95,7 +98,7 @@ async function drawScatterPlot() {
       .attr("cy", 50)
       .attr("r", 6)
       .attr("class", "legend-dot")
-      .attr("fill", "#7F00FF")
+      .attr("fill", allegations)
 
   const legendEntry1Text = legend.append("text")
     .attr("class", "legend-text")
@@ -108,7 +111,7 @@ async function drawScatterPlot() {
       .attr("cy", 20)
       .attr("r", 6)
       .attr("class", "legend-dot")
-      .attr("fill", "#FFA500")
+      .attr("fill", noAllegations)
 
   const legendEntry2Text = legend.append("text")
     .attr("class", "legend-text")
@@ -128,16 +131,15 @@ async function drawScatterPlot() {
       .text(`Time: ${d.Time}, Year: ${d.Year}`)
     tooltip.select("#doping")
       .text(`${d.Doping}`)
-
-    const x = xScale(xAccessor(d))
+      const x = xScale(xAccessor(d))
     const y = yScale(yAccessor(d))
 
     tooltip.style("transform", `translate(`
       + `calc( 27% + ${x}px),`
       + `calc(-70% + ${y}px)`
       + `)`)
-
-    tooltip.style("opacity", 1)
+    tooltip.style("opacity", 0.9)
+    tooltip.style("left", "230px")
   }
 
   function onMouseLeave() {
