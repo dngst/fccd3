@@ -17,13 +17,6 @@ async function drawTreeMapDiagram() {
     }
   }
 
-  dimensions.boundedWidth = dimensions.width
-    - dimensions.margin.left
-    - dimensions.margin.right
-  dimensions.boundedHeight = dimensions.height
-    - dimensions.margin.top
-    - dimensions.margin.bottom
-
   const wrapper = d3.select("#wrapper")
     .append("svg")
       .attr("width", dimensions.width)
@@ -50,19 +43,18 @@ async function drawTreeMapDiagram() {
     .data(root.leaves())
     .enter().append("g")
       .append("rect")
-        .attr("x", d => d.x0)
-        .attr("y", d => d.y0)
+        .on("mouseenter", onMouseEnter)
+        .on("mousemove", onMouseMove)
+        .on("mouseleave", onMouseLeave)
         .attr("data-name", d => d.data.name)
         .attr("data-category", d => d.data.category)
         .attr("data-value", d => d.data.value)
         .attr("class", "tile")
-        .on("mouseenter", onMouseEnter)
-        .on("mousemove", onMouseMove)
-        .on("mouseleave", onMouseLeave)
+        .attr("x", d => d.x0)
+        .attr("y", d => d.y0)
         .attr("fill", d => colorScale(d.data.category))
-        .transition().duration(1000)
-          .attr("width", d => d.x1 - d.x0)
-          .attr("height", d => d.y1 - d.y0)
+        .attr("width", d => d.x1 - d.x0)
+        .attr("height", d => d.y1 - d.y0)
 
   const tooltip = d3.select("#tooltip")
     .attr("class", "tooltip")
