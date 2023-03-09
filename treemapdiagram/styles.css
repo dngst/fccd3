@@ -12,8 +12,13 @@ header {
 }
 
 #title {
-  margin-bottom:  0.1em;
+  margin-top: 0;
+  margin-bottom: 0;
   font-size: 3em;
+}
+
+.tile:hover {
+  fill: #F8F9FA;
 }
 
 .tooltip {

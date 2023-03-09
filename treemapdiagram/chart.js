@@ -52,9 +52,11 @@ async function drawTreeMapDiagram() {
         .attr("class", "tile")
         .attr("x", d => d.x0)
         .attr("y", d => d.y0)
-        .attr("fill", d => colorScale(d.data.category))
         .attr("width", d => d.x1 - d.x0)
         .attr("height", d => d.y1 - d.y0)
+        .attr("fill", "#F8F9FA")
+        .transition().duration(2500)
+          .attr("fill", d => colorScale(d.data.category))
 
   const tooltip = d3.select("#tooltip")
     .attr("class", "tooltip")
