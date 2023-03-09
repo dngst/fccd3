@@ -2,28 +2,37 @@ body {
   font-family: sans-serif;
 }
 
+svg {
+  margin: auto;
+  display: block;
+}
+
+h1 {
+  text-align: center;
+  font-size: 3em;
+}
+
 .bar:hover {
   fill: #D5D5D5;
 }
 
 .yaxis-label {
   fill: black;
-  font-size: 14px;
+  font-size: 1.4em;
   transform: rotate(-90deg);
 }
 
 .tooltip {
   opacity: 0;
   position: absolute;
-  left: 6%;
   padding: 0.6em 1em;
-  background: #FFF;
+  background: #FFFFFF;
   text-align: center;
-  border: 1px solid #DDD;
+  border: 1px solid #DDDDDD;
   z-index: 10;
   pointer-events: none;
 }
 
 .tooltip:before {
-    content: '';
+  content: '';
 }
