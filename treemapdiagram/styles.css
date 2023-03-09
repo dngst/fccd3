@@ -1,0 +1,31 @@
+body {
+  font-family: sans-serif;
+}
+
+svg {
+  margin: auto;
+  display: block;
+}
+
+header {
+  text-align: center;
+}
+
+#title {
+  margin-bottom:  0.1em;
+  font-size: 3em;
+}
+
+.tooltip {
+  position: absolute;
+  font-size: 0.75em;
+  padding: 0.6em 1em;
+  background: #FFFFFF;
+  border: 1px solid #DDDDDD;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.tooltip:before {
+    content: '';
+}
