@@ -17,6 +17,7 @@ header {
 }
 
 .tooltip {
+  opacity: 0;
   position: absolute;
   font-size: 0.75em;
   padding: 0.6em 1em;
@@ -27,5 +28,5 @@ header {
 }
 
 .tooltip:before {
-    content: '';
+  content: '';
 }
