@@ -36,8 +36,8 @@ header {
   position: absolute;
   font-size: 0.75em;
   padding: 0.6em 1em;
-  background: #FFF;
-  border: 1px solid #DDD;
+  background: #FFFFFF;
+  border: 1px solid #DDDDDD;
   z-index: 10;
   pointer-events: none;
 }
