@@ -80,6 +80,7 @@ async function drawBarChart() {
       .data(dataset)
       .enter().append("rect")
       .on("mouseenter", onMouseEnter)
+      .on("mousemove", onMouseMove)
       .on("mouseleave", onMouseLeave)
       .attr("data-date", d => xAccessor(d))
       .attr("data-gdp", d => yAccessor(d))
@@ -106,16 +107,12 @@ async function drawBarChart() {
       .text(`$${yAccessor(d)} Billion`)
     tooltip.select("#gdp")
       .text(`${dateParser(new Date(xAccessor(d)))}`)
+    tooltip.style("opacity", 0.9)
+  }
 
-    const x = xScale(new Date(xAccessor(d))) + dimensions.margin.left
-    const y = yScale(yAccessor(d)) + dimensions.margin.top
-
-    tooltip.style("transform", `translate(`
-      + `calc( -50% + ${x}px),`
-      + `calc(-100% + ${y}px)`
-      + `)`)
-
-    tooltip.style("opacity", 1)
+  function onMouseMove() {
+    tooltip.style("left", `${event.pageX + 20}px`)
+    tooltip.style("top", `${event.pageY}px`)
   }
 
   function onMouseLeave() {
