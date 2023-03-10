@@ -1,6 +1,6 @@
 async function drawHeatMap() {
-  // const url = "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json"
-  const fetchedData = await d3.json("../heat.json")
+  const url = "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json"
+  const fetchedData = await d3.json(url)
 
   const baseTemperature = fetchedData.baseTemperature
   const dataset = fetchedData.monthlyVariance
