@@ -1,6 +1,6 @@
 async function drawHeatMap() {
-  const url = "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json"
-  const fetchedData = await d3.json(url)
+  // const url = "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json"
+  const fetchedData = await d3.json("../heat.json")
 
   const baseTemperature = fetchedData.baseTemperature
   const dataset = fetchedData.monthlyVariance
@@ -12,7 +12,7 @@ async function drawHeatMap() {
   const tempAccessor = d => d.variance
 
   const colors = ["#225095", "#D4121A", "#E0E5E7", "#A6A6A6"]
-  const monthNames = ["January", "February", "March", "April", "May", "June", 
+  const months = ["January", "February", "March", "April", "May", "June", 
     "July", "August", "September", "October", "November", "December"];
 
   const width = 950
@@ -71,7 +71,7 @@ async function drawHeatMap() {
   const yAxisGenerator = d3.axisLeft()
     .scale(yScale)
     .tickValues(yScale.domain())
-    .tickFormat(d => monthNames[d])
+    .tickFormat(d => months[d])
 
   const yAxis = bounds.append("g")
     .call(yAxisGenerator)
@@ -83,7 +83,7 @@ async function drawHeatMap() {
       .attr("x", d => xScale(xAccessor(d)))
       .attr("y", d => yScale(yAccessor(d) - 1))
       .attr("class", "cell")
-      .attr("data-month", d => d.month)
+      .attr("data-month", d => yAccessor(d))
       .attr("data-year", d => xAccessor(d))
       .attr("data-temp", d => calcTemp(tempAccessor(d)))
       .on("mouseenter", onMouseEnter)
@@ -113,11 +113,11 @@ async function drawHeatMap() {
     d = d3.select(this).datum()
     tooltip.attr("data-year", xAccessor(d))
     tooltip.select("#year_month")
-      .text(`${xAccessor(d)} - ${monthFormat(new Date(0, d.month, 0))}`)
-    tooltip.select("#variance")
-      .text(`${String(tempAccessor(d)).startsWith("-")? roundTemp(tempAccessor(d)) : `+${roundTemp(tempAccessor(d))}`}℃`)
+      .text(`${xAccessor(d)} - ${monthFormat(new Date(0, yAccessor(d), 0))}`)
     tooltip.select("#temperature")
       .text(`${calcTemp(tempAccessor(d))}℃`)
+    tooltip.select("#variance")
+      .text(`${String(tempAccessor(d)).startsWith("-")? roundTemp(tempAccessor(d)) : `+${roundTemp(tempAccessor(d))}`}℃`)
     tooltip.style("opacity", 0.9)
   }
 
