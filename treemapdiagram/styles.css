@@ -17,10 +17,9 @@ header {
   font-size: 3em;
 }
 
-.tile:hover {
-  fill: #F8F9FA;
+.tile {
+  fill-opacity: 0.6;
 }
-
 .tooltip {
   opacity: 0;
   position: absolute;
@@ -34,4 +33,8 @@ header {
 
 .tooltip:before {
   content: '';
+}
+
+.rect-text:hover {
+  cursor: default;
 }

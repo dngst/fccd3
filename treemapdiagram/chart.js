@@ -3,7 +3,7 @@ async function drawTreeMapDiagram() {
   const dataset = await d3.json(url)
 
   const genres = dataset.children.map(d => { return d.name })
-  const colors = ["#225095", "#D4121A", "#E0E5E7", "#A6A6A6", "#96ADC8", "#FAC901", "#436436"]
+  const colors = ["#225095", "#D4121A", "#D4DBDE", "#A020F0", "#FFA500", "#FAC901", "#436436"]
 
   const width = 900
   let dimensions = {
@@ -36,30 +36,64 @@ async function drawTreeMapDiagram() {
   const hierachy = d3.hierarchy(dataset)
     .sum(d => d.value)
     .sort((a, b) => b.value - a.value)
-  const treemap = d3.treemap().size([dimensions.width, dimensions.height]).padding(1)
+  const treemap = d3.treemap().size([dimensions.width, dimensions.height]).paddingOuter(2).paddingInner(1)
   const root = treemap(hierachy)
 
-  const rects = bounds.selectAll("rect")
+  const rectGroup = bounds.selectAll("g")
     .data(root.leaves())
-    .enter().append("g")
-      .append("rect")
-        .on("mouseenter", onMouseEnter)
-        .on("mousemove", onMouseMove)
-        .on("mouseleave", onMouseLeave)
-        .attr("data-name", d => d.data.name)
-        .attr("data-category", d => d.data.category)
-        .attr("data-value", d => d.data.value)
-        .attr("class", "tile")
-        .attr("x", d => d.x0)
-        .attr("y", d => d.y0)
-        .attr("width", d => d.x1 - d.x0)
-        .attr("height", d => d.y1 - d.y0)
-        .attr("fill", "#F8F9FA")
-        .transition().duration(2500)
-          .attr("fill", d => colorScale(d.data.category))
+    .enter()
+      .append("g")
+      .attr("transform", d => `translate(${d.x0}, ${d.y0})`)
+      .on("mouseenter", onMouseEnter)
+      .on("mousemove", onMouseMove)
+      .on("mouseleave", onMouseLeave)
+
+  rectGroup.append("rect")
+    .attr("data-name", d => d.data.name)
+    .attr("data-category", d => d.data.category)
+    .attr("data-value", d => d.data.value)
+    .attr("class", "tile")
+    .attr("width", d => d.x1 - d.x0)
+    .attr("height", d => d.y1 - d.y0)
+    .attr("fill", "#F8F9FA")
+    .transition().duration(1500)
+      .attr("fill", d => colorScale(d.data.category))
+
+  rectGroup.append("text")
+    .selectAll("tspan")
+    .data(d => d.data.name.split(/(?=[A-Z][^A-Z])/g))
+    .enter().append("tspan")
+      .text(d => d)
+      .attr("font-size", "0.55em")
+      .attr("x", 0)
+      .attr("y", (d, i) => 10 + 8.5 * i)
+      .attr("class", "rect-text")
 
   const tooltip = d3.select("#tooltip")
     .attr("class", "tooltip")
+
+  const legend = d3.select("#legend")
+    .append("svg")
+      .attr("width", dimensions.width)
+      .attr("height", 35)
+      .style("margin-top", "2%")
+
+  const legendGroup = legend.append("g").selectAll("g")
+    .data(genres)
+    .enter().append("g")
+
+  legendGroup.append("rect")
+    .attr("x", (d, i) => i * 134)
+    .attr("y", 0)
+    .attr("width", 15)
+    .attr("height", 15)
+    .attr("fill", d => colorScale(d))
+    .attr("class", "legend-item")
+
+  legendGroup.append("text")
+    .attr("x", (d, i) => (i * 133) + 26)
+    .attr("y", 14)
+    .text(d => d)
 
   function onMouseEnter() {
     d = d3.select(this).datum()
