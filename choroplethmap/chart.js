@@ -5,7 +5,9 @@ async function drawChoroplethMap() {
   const countyData = await d3.json(countyUrl)
 
   const percentage = d => d["bachelorsOrHigher"]
-  const colors = ["#006d2c", "#238b45", "#41ab5d", "#74c476", "#a1d99b", "#c7e9c0", "#e5f5e0"].reverse()
+  const colors = ["#E5F5E0", "#C7E9C0", "#A1D99B", "#74C476", "#41AB5D", "#238B45", "#006D2C", "#00441B"]
+  // convert TopoJSON to GeoJSON
+  const counties = topojson.feature(countyData, countyData.objects.counties).features
 
   const width = 950
   let dimensions = {
@@ -28,7 +30,7 @@ async function drawChoroplethMap() {
 
   const colorScale = d3.scaleQuantize()
     .domain(d3.extent(educationData, percentage))
-    .range(colors);
+    .range(colors)
 
   const wrapper = d3.select("#wrapper")
     .append("svg")
@@ -42,27 +44,30 @@ async function drawChoroplethMap() {
       dimensions.margin.top
     }px)`)
 
-  const map = bounds.selectAll("g")
-    // convert TopoJSON to GeoJSON
-    .data(topojson.feature(countyData, countyData.objects.counties).features)
-    .enter().append("g")
-
-  map.append("path")
-    // geographic path generator
-    .attr("d", d3.geoPath())
-    .attr("class", "county")
-    .on("mouseenter", onMouseEnter)
-    .on("mousemove", onMouseMove)
-    .on("mouseleave", onMouseLeave)
-    .attr("data-fips", d => d.id)
-    .attr("data-education", d => countyEducation(d.id, "bachelorsOrHigher"))
-    .attr("county-name", d => countyEducation(d.id, "area_name"))
-    .attr("fill", "#DDDDDD")
-    .transition().duration(2000)
-      .attr("fill", d => colorScale(countyEducation(d.id, "bachelorsOrHigher")))
+  const map = bounds.selectAll("path")
+    .data(counties)
+    .enter().append("path")
+      // geographic path generator
+      .attr("d", d3.geoPath())
+      .attr("class", "county")
+      .on("mouseenter", onMouseEnter)
+      .on("mousemove", onMouseMove)
+      .on("mouseleave", onMouseLeave)
+      .attr("data-fips", d => d.id)
+      .attr("data-education", d => countyEducation(d.id, "bachelorsOrHigher"))
+      .attr("county-name", d => countyEducation(d.id, "area_name"))
+      .attr("fill", "#F8F9FA")
+      .transition().duration(2000)
+        .attr("fill", d => colorScale(countyEducation(d.id, "bachelorsOrHigher")))
 
   const tooltip = d3.select("#tooltip")
     .attr("class", "tooltip")
+
+  function countyEducation(id, attr) {
+    return educationData.find(obj => {
+        return obj["fips"] === id
+      })[`${attr}`]
+  }
 
   function onMouseEnter() {
     d = d3.select(this).datum()
@@ -83,11 +88,6 @@ async function drawChoroplethMap() {
     tooltip.style("opacity", 0)
   }
 
-  function countyEducation(id, attr) {
-    return educationData.find(obj => {
-        return obj["fips"] === id
-      })[`${attr}`]
-  }
 }
 
 drawChoroplethMap()
