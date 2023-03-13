@@ -29,7 +29,7 @@ async function drawHeatMap() {
   const width = 1320
   let dimensions = {
     width: width,
-    height: width * 0.4,
+    height: width * 0.35,
     margin: {
       top: 10,
       right: 20,
@@ -94,19 +94,54 @@ async function drawHeatMap() {
       .attr("x", d => xScale(xAccessor(d)))
       .attr("y", d => yScale(yAccessor(d) - 1))
       .attr("class", "cell")
-      .attr("data-month", d => yAccessor(d))
+      .attr("data-month", d => yAccessor(d) - 1)
       .attr("data-year", d => xAccessor(d))
       .attr("data-temp", d => calcTemp(tempAccessor(d)))
       .on("mouseenter", onMouseEnter)
       .on("mousemove", onMouseMove)
       .on("mouseleave", onMouseLeave)
       .attr("fill", d => colorScale(tempAccessor(d)))
-      .transition().duration(1000)
+      .transition().duration(1000).ease(d3.easeBounceOut)
         .attr("height", yScale.bandwidth())
-        .attr("width", 4)
+        .attr("width", 5)
 
   const tooltip = d3.select("#tooltip")
     .attr("class", "tooltip")
+
+  let temps = []
+
+  dataset.map(data => {
+    temps.push(calcTemp(tempAccessor(data)))
+  })
+
+  const legendScale = d3.scaleLinear()
+    .domain(d3.extent(temps))
+    .range([0, dimensions.boundedWidth / 4.63])
+    .nice()
+
+  const legendAxis = d3.axisBottom(legendScale)
+    .ticks(8)
+    .tickFormat(d3.format('.1f'))
+
+  const legend = d3.select("#legend")
+    .append("svg")
+      .attr("width", dimensions.boundedWidth)
+      .attr("height", 60)
+
+  legendGroup = legend.append("g")
+
+  legendGroup.selectAll("rect")
+    .data(colors)
+    .enter().append("rect")
+      .attr("width", 30)
+      .attr("height", 30)
+      .attr("y", 0)
+      .attr("x", (d, i) => i * 30)
+      .attr("fill", d => d)
+
+  legend.append("g")
+    .call(legendAxis)
+      .style("transform", `translate(${0}px, ${30}px)`)
 
   function calcTemp(variance) {
     if(String(variance).startsWith("-")) {
