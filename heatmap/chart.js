@@ -121,7 +121,7 @@ async function drawHeatMap() {
 
   const legendAxis = d3.axisBottom(legendScale)
     .ticks(8)
-    .tickFormat(d3.format('.1f'))
+    .tickFormat(d3.format(".1f"))
 
   const legend = d3.select("#legend")
     .append("svg")
