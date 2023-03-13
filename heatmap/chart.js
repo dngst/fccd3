@@ -11,14 +11,25 @@ async function drawHeatMap() {
   const yAccessor = d => d.month
   const tempAccessor = d => d.variance
 
-  const colors = ["#225095", "#D4121A", "#E0E5E7", "#A6A6A6"]
-  const months = ["January", "February", "March", "April", "May", "June", 
-    "July", "August", "September", "October", "November", "December"];
+  const colors = [
+    "rgb(69, 117, 180)",
+    "rgb(116, 173, 209)",
+    "rgb(171, 217, 233)",
+    "rgb(224, 243, 248)",
+    "rgb(255, 255, 191)",
+    "rgb(254, 224, 144)",
+    "rgb(253, 174, 97)",
+    "rgb(244, 109, 67)",
+    "rgb(215, 48, 39)"
+    ]
 
-  const width = 950
+  const months = ["January", "February", "March", "April", "May", "June", 
+    "July", "August", "September", "October", "November", "December"]
+
+  const width = 1320
   let dimensions = {
     width: width,
-    height: width * 0.6,
+    height: width * 0.4,
     margin: {
       top: 10,
       right: 20,
@@ -46,7 +57,7 @@ async function drawHeatMap() {
       dimensions.margin.top
     }px)`)
 
-  const colorScale = d3.scaleLinear()
+  const colorScale = d3.scaleQuantize()
     .domain(d3.extent(dataset, tempAccessor))
     .range(colors)
 
