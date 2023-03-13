@@ -63,6 +63,32 @@ async function drawChoroplethMap() {
   const tooltip = d3.select("#tooltip")
     .attr("class", "tooltip")
 
+  const legend = d3.select("#legend")
+    .append("svg")
+      .attr("width", dimensions.boundedWidth)
+
+  const legendScale = d3.scaleLinear()
+    .domain(d3.extent(educationData, percentage))
+    .range([0, 259])
+
+  const legendAxis = d3.axisBottom(legendScale)
+    .tickFormat(d => d + "%")
+
+  legendGroup = legend.append("g")
+
+  legendGroup.selectAll("rect")
+    .data(colors)
+    .enter().append("rect")
+      .attr("width", 50)
+      .attr("height", 8)
+      .attr("y", 0)
+      .attr("x", (d, i) => i * 30)
+      .attr("fill", d => d)
+
+  legend.append("g")
+    .call(legendAxis)
+      .style("transform", `translate(${0}px, ${8}px)`)
+
   function countyEducation(id, attr) {
     return educationData.find(obj => {
         return obj["fips"] === id
@@ -87,7 +113,6 @@ async function drawChoroplethMap() {
   function onMouseLeave() {
     tooltip.style("opacity", 0)
   }
-
 }
 
 drawChoroplethMap()
