@@ -56,7 +56,7 @@ async function drawTreeMapDiagram() {
     .attr("width", d => d.x1 - d.x0)
     .attr("height", d => d.y1 - d.y0)
     .attr("fill", "#F8F9FA")
-    .transition().duration(1500)
+    .transition().duration(1000).delay((d, i) => i * 50)
       .attr("fill", d => colorScale(d.data.category))
 
   rectGroup.append("text")

@@ -57,7 +57,7 @@ async function drawChoroplethMap() {
       .attr("data-education", d => countyEducation(d.id, "bachelorsOrHigher"))
       .attr("county-name", d => countyEducation(d.id, "area_name"))
       .attr("fill", "#F8F9FA")
-      .transition().duration(2000)
+      .transition().duration(1000).delay((d, i) => i * 2)
         .attr("fill", d => colorScale(countyEducation(d.id, "bachelorsOrHigher")))
 
   const tooltip = d3.select("#tooltip")

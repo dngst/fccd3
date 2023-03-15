@@ -90,7 +90,7 @@ async function drawBarChart() {
       .attr("height", 0)
       .attr("y", d => yScale(0))
       .attr("x", d => xScale(new Date(xAccessor(d))))
-      .transition().duration(2500)
+      .transition().duration(1000).delay((d, i) => i * 20)
         .attr("y", d => yScale(yAccessor(d)))
         .attr("height", d => dimensions.boundedHeight - yScale(yAccessor(d)))
 
