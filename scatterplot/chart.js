@@ -79,13 +79,14 @@ async function drawScatterPlot() {
     .enter().append("circle")
       .attr("cx", 0)
       .attr("cy", 459)
-      .attr("fill", d => d.Doping? allegations : noAllegations)
       .attr("class", "dot")
+      .attr("fill", d => d.Doping? allegations : noAllegations)
       .attr("data-yvalue", d => yAccessor(d).toISOString())
       .attr("data-xvalue", d => xAccessor(d))
       .on("mouseenter", onMouseEnter)
+      .on("mousemove", onMouseMove)
       .on("mouseleave", onMouseLeave)
-      .transition().duration(5000)
+      .transition().duration(5000).delay((d, i) => i * 100)
         .attr("r", 6)
         .attr("cy", d => yScale(yAccessor(d)))
         .attr("cx", d => xScale(xAccessor(d)))
@@ -131,15 +132,12 @@ async function drawScatterPlot() {
       .text(`Time: ${d.Time}, Year: ${d.Year}`)
     tooltip.select("#doping")
       .text(`${d.Doping}`)
-      const x = xScale(xAccessor(d))
-    const y = yScale(yAccessor(d))
-
-    tooltip.style("transform", `translate(`
-      + `calc( 27% + ${x}px),`
-      + `calc(-70% + ${y}px)`
-      + `)`)
     tooltip.style("opacity", 0.9)
-    tooltip.style("left", "230px")
+  }
+
+  function onMouseMove() {
+    tooltip.style("left", `${event.pageX}px`)
+    tooltip.style("top", `${event.pageY}px`)
   }
 
   function onMouseLeave() {
