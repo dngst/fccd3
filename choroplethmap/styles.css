@@ -31,3 +31,10 @@ header {
 .tooltip:before {
   content: '';
 }
+
+.state-border {
+  fill: none;
+  stroke: white;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}

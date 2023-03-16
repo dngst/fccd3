@@ -1,13 +1,13 @@
 async function drawChoroplethMap() {
   const educationUrl = "https://cdn.freecodecamp.org/testable-projects-fcc/data/choropleth_map/for_user_education.json"
-  const countyUrl = "https://cdn.freecodecamp.org/testable-projects-fcc/data/choropleth_map/counties.json"
+  const usUrl = "https://cdn.freecodecamp.org/testable-projects-fcc/data/choropleth_map/counties.json"
   const educationData = await d3.json(educationUrl)
-  const countyData = await d3.json(countyUrl)
+  const us = await d3.json(usUrl)
 
   const percentage = d => d["bachelorsOrHigher"]
   const colors = ["#E5F5E0", "#C7E9C0", "#A1D99B", "#74C476", "#41AB5D", "#238B45", "#006D2C", "#00441B"]
   // convert TopoJSON to GeoJSON
-  const counties = topojson.feature(countyData, countyData.objects.counties).features
+  const counties = topojson.feature(us, us.objects.counties).features
 
   const width = 950
   let dimensions = {
@@ -56,9 +56,12 @@ async function drawChoroplethMap() {
       .attr("data-fips", d => d.id)
       .attr("data-education", d => countyEducation(d.id, "bachelorsOrHigher"))
       .attr("county-name", d => countyEducation(d.id, "area_name"))
-      .attr("fill", "#F8F9FA")
-      .transition().duration(1000).delay((d, i) => i * 2)
-        .attr("fill", d => colorScale(countyEducation(d.id, "bachelorsOrHigher")))
+      .attr("fill", d => colorScale(countyEducation(d.id, "bachelorsOrHigher")))
+
+  wrapper.append("path")
+    .datum(topojson.mesh(us, us.objects.states, (a, b) => a !== b))
+      .attr("d", d3.geoPath())
+      .attr("class", "state-border")
 
   const tooltip = d3.select("#tooltip")
     .attr("class", "tooltip")
