@@ -44,11 +44,13 @@ async function drawChoroplethMap() {
       dimensions.margin.top
     }px)`)
 
+  const path = d3.geoPath()
+
   const map = bounds.selectAll("path")
     .data(counties)
     .enter().append("path")
       // geographic path generator
-      .attr("d", d3.geoPath())
+      .attr("d", path)
       .attr("class", "county")
       .on("mouseenter", onMouseEnter)
       .on("mousemove", onMouseMove)
@@ -60,19 +62,21 @@ async function drawChoroplethMap() {
 
   wrapper.append("path")
     .datum(topojson.mesh(us, us.objects.states, (a, b) => a !== b))
-      .attr("d", d3.geoPath())
+      .attr("d", path)
       .attr("class", "state-border")
 
-  const tooltip = d3.select("#tooltip")
-    .attr("class", "tooltip")
+  // legend
+  const itemHeight = 8
+  const itemWidth = 40
+  const legendWidth = itemWidth * colors.length
 
   const legend = d3.select("#legend")
     .append("svg")
-      .attr("width", dimensions.boundedWidth)
+      .attr("width", legendWidth)
 
   const legendScale = d3.scaleLinear()
     .domain(d3.extent(educationData, percentage))
-    .range([0, 259])
+    .range([0, legendWidth])
 
   const legendAxis = d3.axisBottom(legendScale)
     .tickFormat(d => d + "%")
@@ -82,21 +86,19 @@ async function drawChoroplethMap() {
   legendGroup.selectAll("rect")
     .data(colors)
     .enter().append("rect")
-      .attr("width", 50)
-      .attr("height", 8)
+      .attr("width", itemWidth)
+      .attr("height", itemHeight)
       .attr("y", 0)
-      .attr("x", (d, i) => i * 30)
+      .attr("x", (d, i) => i * itemWidth)
       .attr("fill", d => d)
 
   legend.append("g")
     .call(legendAxis)
       .style("transform", `translate(${0}px, ${8}px)`)
 
-  function countyEducation(id, attr) {
-    return educationData.find(obj => {
-        return obj["fips"] === id
-      })[`${attr}`]
-  }
+  // interactions
+  const tooltip = d3.select("#tooltip")
+    .attr("class", "tooltip")
 
   function onMouseEnter() {
     d = d3.select(this).datum()
@@ -115,6 +117,13 @@ async function drawChoroplethMap() {
 
   function onMouseLeave() {
     tooltip.style("opacity", 0)
+  }
+
+  // utils
+  function countyEducation(id, attr) {
+    return educationData.find(obj => {
+        return obj["fips"] === id
+      })[`${attr}`]
   }
 }
 

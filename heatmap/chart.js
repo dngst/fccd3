@@ -106,55 +106,44 @@ async function drawHeatMap() {
       .transition().duration(1000).delay((d, i) => i * 3)
         .attr("fill", d => colorScale(tempAccessor(d)))
 
-  const tooltip = d3.select("#tooltip")
-    .attr("class", "tooltip")
-
+  // legend
   let temps = []
 
   dataset.map(data => {
     temps.push(calcTemp(tempAccessor(data)))
   })
 
+  const size = 30
+  const legendWidth = size * colors.length
+
   const legendScale = d3.scaleLinear()
     .domain(d3.extent(temps))
-    .range([0, dimensions.boundedWidth / 4.63])
-    .nice()
+    .range([0, legendWidth])
 
   const legendAxis = d3.axisBottom(legendScale)
-    .ticks(8)
-    .tickFormat(d3.format(".1f"))
 
   const legend = d3.select("#legend")
     .append("svg")
-      .attr("width", dimensions.boundedWidth)
-      .attr("height", 60)
+      .attr("width", legendWidth)
 
   legendGroup = legend.append("g")
 
   legendGroup.selectAll("rect")
     .data(colors)
     .enter().append("rect")
-      .attr("width", 30)
-      .attr("height", 30)
+      .attr("width", size)
+      .attr("height", size)
       .attr("y", 0)
-      .attr("x", (d, i) => i * 30)
+      .attr("x", (d, i) => i * size)
       .attr("fill", d => d)
 
   legend.append("g")
     .call(legendAxis)
-      .style("transform", `translate(${0}px, ${30}px)`)
+      .style("transform", `translate(${0}px, ${size}px)`)
 
-  function calcTemp(variance) {
-    if(String(variance).startsWith("-")) {
-      return roundTemp(baseTemperature - String(variance).split("-")[1])
-    } else {
-      return roundTemp(baseTemperature + variance)
-    }
-  }
-
-  function roundTemp(temp) {
-    return Math.round(temp * 10) / 10
-  }
+  // interactions
+  const tooltip = d3.select("#tooltip")
+    .attr("class", "tooltip")
 
   function onMouseEnter() {
     d = d3.select(this).datum()
@@ -175,6 +164,19 @@ async function drawHeatMap() {
 
   function onMouseLeave() {
     tooltip.style("opacity", 0)
+  }
+
+  // utils
+  function calcTemp(variance) {
+    if(String(variance).startsWith("-")) {
+      return roundTemp(baseTemperature - String(variance).split("-")[1])
+    } else {
+      return roundTemp(baseTemperature + variance)
+    }
+  }
+
+  function roundTemp(temp) {
+    return Math.round(temp * 10) / 10
   }
 }
 
