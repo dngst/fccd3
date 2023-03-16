@@ -5,7 +5,7 @@ async function drawTreeMapDiagram() {
   const genres = dataset.children.map(d => { return d.name })
   const colors = ["#225095", "#D4121A", "#D4DBDE", "#A020F0", "#FFA500", "#FAC901", "#436436"]
 
-  const width = 900
+  const width = 1170
   let dimensions = {
     width: width,
     height: width * 0.6,
@@ -36,7 +36,7 @@ async function drawTreeMapDiagram() {
   const hierachy = d3.hierarchy(dataset)
     .sum(d => d.value)
     .sort((a, b) => b.value - a.value)
-  const treemap = d3.treemap().size([dimensions.width, dimensions.height]).paddingOuter(2).paddingInner(1)
+  const treemap = d3.treemap().size([dimensions.width, dimensions.height]).paddingOuter(1.5).paddingInner(1)
   const root = treemap(hierachy)
 
   const rectGroup = bounds.selectAll("g")
@@ -55,26 +55,23 @@ async function drawTreeMapDiagram() {
     .attr("class", "tile")
     .attr("width", d => d.x1 - d.x0)
     .attr("height", d => d.y1 - d.y0)
-    .attr("fill", "#F8F9FA")
-    .transition().duration(1000).delay((d, i) => i * 50)
-      .attr("fill", d => colorScale(d.data.category))
+    .attr("fill", d => colorScale(d.data.category))
 
   rectGroup.append("text")
     .selectAll("tspan")
     .data(d => d.data.name.split(/(?=[A-Z][^A-Z])/g))
     .enter().append("tspan")
       .text(d => d)
-      .attr("font-size", "0.55em")
+      .attr("font-size", "0.5em")
       .attr("x", 0)
       .attr("y", (d, i) => 10 + 8.5 * i)
-      .attr("class", "rect-text")
 
   const tooltip = d3.select("#tooltip")
     .attr("class", "tooltip")
 
   const legend = d3.select("#legend")
     .append("svg")
-      .attr("width", dimensions.width)
+      .attr("width", 1000)
       .attr("height", 35)
       .style("margin-top", "2%")
 
@@ -83,7 +80,7 @@ async function drawTreeMapDiagram() {
     .enter().append("g")
 
   legendGroup.append("rect")
-    .attr("x", (d, i) => i * 134)
+    .attr("x", (d, i) => i * 150)
     .attr("y", 0)
     .attr("width", 15)
     .attr("height", 15)
@@ -91,7 +88,7 @@ async function drawTreeMapDiagram() {
     .attr("class", "legend-item")
 
   legendGroup.append("text")
-    .attr("x", (d, i) => (i * 133) + 26)
+    .attr("x", (d, i) => i * 150 + 20)
     .attr("y", 14)
     .text(d => d)
 
