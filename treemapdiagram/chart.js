@@ -62,7 +62,7 @@ async function drawTreeMapDiagram() {
     .data(d => d.data.name.split(/(?=[A-Z][^A-Z])/g))
     .enter().append("tspan")
       .text(d => d)
-      .attr("font-size", "0.5em")
+      .attr("font-size", "0.55em")
       .attr("x", 0)
       .attr("y", (d, i) => 10 + 8.5 * i)
 

@@ -20,6 +20,7 @@ header {
 .tile {
   fill-opacity: 0.6;
 }
+
 .tooltip {
   opacity: 0;
   position: absolute;
