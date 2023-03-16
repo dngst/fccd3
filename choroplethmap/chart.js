@@ -94,7 +94,7 @@ async function drawChoroplethMap() {
 
   legend.append("g")
     .call(legendAxis)
-      .style("transform", `translate(${0}px, ${8}px)`)
+      .style("transform", `translate(${0}px, ${itemHeight}px)`)
 
   // interactions
   const tooltip = d3.select("#tooltip")
