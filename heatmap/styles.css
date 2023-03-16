@@ -37,3 +37,7 @@ header {
 .tooltip:before {
   content: '';
 }
+
+#temperature {
+  font-weight: bold;
+}
