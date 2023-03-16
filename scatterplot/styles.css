@@ -49,3 +49,8 @@ header {
 .tooltip:before {
   content: '';
 }
+
+#year_time {
+  font-weight: bold;
+}
+

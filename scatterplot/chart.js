@@ -8,8 +8,8 @@ async function drawScatterPlot() {
   const xAccessor = d => d.Year
   const yAccessor = d => minsParser(d.Time)
 
-  const allegations = "#7F00FF";
-  const noAllegations = "#FFA500";
+  const allegations = "#7F00FF"
+  const noAllegations = "#FFA500"
 
   const width = 900
   let dimensions = {
@@ -91,6 +91,7 @@ async function drawScatterPlot() {
         .attr("cy", d => yScale(yAccessor(d)))
         .attr("cx", d => xScale(xAccessor(d)))
 
+  // legend
   const legend = bounds.append("g")
     .attr("id", "legend")
 
@@ -120,6 +121,7 @@ async function drawScatterPlot() {
     .attr("x", 780)
     .attr("y", 25)
 
+  // interaction
   const tooltip = d3.select("#tooltip")
     .attr("class", "tooltip")
 
@@ -127,7 +129,7 @@ async function drawScatterPlot() {
     d = d3.select(this).datum()
     tooltip.attr("data-year", xAccessor(d))
     tooltip.select("#name_nationality")
-      .text(`${d.Name}; ${d.Nationality}`)
+      .text(`${d.Name} - ${d.Nationality}`)
     tooltip.select("#year_time")
       .text(`Time: ${d.Time}, Year: ${d.Year}`)
     tooltip.select("#doping")
