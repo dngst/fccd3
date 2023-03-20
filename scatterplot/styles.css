@@ -25,10 +25,12 @@ header {
 
 .dot, .legend-dot {
   stroke: black;
+  stroke-width: 0.5;
 }
 
 .dot:hover {
-  fill: #FFFFFF;
+  fill: brown;
+  r: 7;
 }
 
 .legend-text {

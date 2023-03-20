@@ -87,7 +87,7 @@ async function drawScatterPlot() {
       .on("mousemove", onMouseMove)
       .on("mouseleave", onMouseLeave)
       .transition().duration(5000).delay((d, i) => i * 100)
-        .attr("r", 6)
+        .attr("r", 5)
         .attr("cy", d => yScale(yAccessor(d)))
         .attr("cx", d => xScale(xAccessor(d)))
 
