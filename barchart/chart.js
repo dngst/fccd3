@@ -40,7 +40,7 @@ async function drawBarChart() {
 
   const colorScale = d3.scaleLinear()
     .domain(d3.extent(dataset, yAccessor))
-    .range(["#85BB65", "#2E471F"])
+    .range(["#85BB65", "#223517"])
 
   const xScale = d3.scaleTime()
     .domain(d3.extent(dataset, d => {
@@ -99,13 +99,13 @@ async function drawBarChart() {
 
   const dateParser = d3.timeFormat("%B %d, %Y")
 
- function onMouseEnter() {
+  function onMouseEnter() {
     d = d3.select(this).datum()
     tooltip
       .attr("data-date", xAccessor(d))
-    tooltip.select("#date")
-      .text(`$${yAccessor(d)} Billion`)
     tooltip.select("#gdp")
+      .text(`$${yAccessor(d)} Billion`)
+    tooltip.select("#date")
       .text(`${dateParser(new Date(xAccessor(d)))}`)
     tooltip.style("opacity", 0.9)
   }

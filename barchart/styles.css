@@ -36,3 +36,9 @@ h1 {
 .tooltip:before {
   content: '';
 }
+
+.tooltip-date {
+  font-size: 1.1em;
+  margin-bottom: 0.2em;
+  font-weight: 600;
+}

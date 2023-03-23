@@ -20,7 +20,7 @@ header {
 .tooltip {
   opacity: 0;
   position: absolute;
-  font-size: 0.75em;
+  font-size: 0.9em;
   padding: 0.6em 1em;
   background: #FFFFFF;
   border: 1px solid #DDDDDD;
