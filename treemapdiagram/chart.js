@@ -2,6 +2,8 @@ async function drawTreeMapDiagram() {
   const url = "https://cdn.freecodecamp.org/testable-projects-fcc/data/tree_map/movie-data.json"
   const dataset = await d3.json(url)
 
+  const valueAccessor = d => +d.value
+
   const genres = dataset.children.map(d => { return d.name })
   const colors = ["#225095", "#D4121A", "#D4DBDE", "#A020F0", "#FFA500", "#FAC901", "#436436"]
 
@@ -100,7 +102,7 @@ async function drawTreeMapDiagram() {
     tooltip.select("#category")
       .text(`Category: ${d.data.category}`)
     tooltip.select("#value")
-      .text(`Value: ${d.data.value}`)
+      .text(`Value: ${valueAccessor(d.data).toLocaleString()}`)
     tooltip.style("opacity", 0.9)
   }
 
