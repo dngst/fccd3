@@ -151,9 +151,9 @@ async function drawHeatMap() {
     tooltip.select("#year_month")
       .text(`${xAccessor(d)} - ${monthFormat(new Date(0, yAccessor(d), 0))}`)
     tooltip.select("#temperature")
-      .text(`${calcTemp(tempAccessor(d))}℃`)
+      .html(`${calcTemp(tempAccessor(d))}&#8451;`)
     tooltip.select("#variance")
-      .text(`${String(tempAccessor(d)).startsWith("-")? roundTemp(tempAccessor(d)) : `+${roundTemp(tempAccessor(d))}`}℃`)
+      .html(`${String(tempAccessor(d)).startsWith("-")? roundTemp(tempAccessor(d)) : `+${roundTemp(tempAccessor(d))}`}&#8451;`)
     tooltip.style("opacity", 0.9)
   }
 
