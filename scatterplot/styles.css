@@ -24,12 +24,12 @@ header {
 }
 
 .dot, .legend-dot {
-  stroke: black;
+  stroke: #FFFFFF;
   stroke-width: 0.5;
 }
 
 .dot:hover {
-  fill: maroon;
+  stroke: black;
   r: 7;
 }
 
