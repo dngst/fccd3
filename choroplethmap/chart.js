@@ -52,7 +52,9 @@ async function drawChoroplethMap() {
       // geographic path generator
       .attr("d", path)
       .attr("class", "county")
-      .on("mouseenter", onMouseEnter)
+      .on("mouseenter", function(e, datum) {
+        onMouseEnter(datum)
+      })
       .on("mousemove", onMouseMove)
       .on("mouseleave", onMouseLeave)
       .attr("data-fips", d => d.id)
@@ -100,8 +102,7 @@ async function drawChoroplethMap() {
   const tooltip = d3.select("#tooltip")
     .attr("class", "tooltip")
 
-  function onMouseEnter() {
-    d = d3.select(this).datum()
+  function onMouseEnter(d) {
     tooltip.attr("data-education", countyEducation(d.id, "bachelorsOrHigher"))
     tooltip.text(`
       ${countyEducation(d.id, "area_name")},

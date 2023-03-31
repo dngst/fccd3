@@ -46,7 +46,9 @@ async function drawTreeMapDiagram() {
     .enter()
       .append("g")
       .attr("transform", d => `translate(${d.x0}, ${d.y0})`)
-      .on("mouseenter", onMouseEnter)
+      .on("mouseenter", function(e, datum) {
+        onMouseEnter(datum)
+      })
       .on("mousemove", onMouseMove)
       .on("mouseleave", onMouseLeave)
 
@@ -94,8 +96,7 @@ async function drawTreeMapDiagram() {
     .attr("y", 14)
     .text(d => d)
 
-  function onMouseEnter() {
-    d = d3.select(this).datum()
+  function onMouseEnter(d) {
     tooltip.select("#name")
       .text(d.data.name)
     tooltip.attr("data-value", d.data.value)

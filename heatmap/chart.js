@@ -97,7 +97,9 @@ async function drawHeatMap() {
       .attr("data-month", d => yAccessor(d) - 1)
       .attr("data-year", d => xAccessor(d))
       .attr("data-temp", d => calcTemp(tempAccessor(d)))
-      .on("mouseenter", onMouseEnter)
+      .on("mouseenter", function(e, datum) {
+        onMouseEnter(datum)
+      })
       .on("mousemove", onMouseMove)
       .on("mouseleave", onMouseLeave)
       .attr("width", 5)
@@ -145,8 +147,7 @@ async function drawHeatMap() {
   const tooltip = d3.select("#tooltip")
     .attr("class", "tooltip")
 
-  function onMouseEnter() {
-    d = d3.select(this).datum()
+  function onMouseEnter(d) {
     tooltip.attr("data-year", xAccessor(d))
     tooltip.select("#year_month")
       .text(`${xAccessor(d)} - ${monthFormat(new Date(0, yAccessor(d), 0))}`)

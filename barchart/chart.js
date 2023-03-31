@@ -79,7 +79,9 @@ async function drawBarChart() {
     .selectAll("g")
       .data(dataset)
       .enter().append("rect")
-      .on("mouseenter", onMouseEnter)
+      .on("mouseenter", function(e, datum) {
+        onMouseEnter(datum)
+      })
       .on("mousemove", onMouseMove)
       .on("mouseleave", onMouseLeave)
       .attr("data-date", d => xAccessor(d))
@@ -99,8 +101,7 @@ async function drawBarChart() {
 
   const dateParser = d3.timeFormat("%B %d, %Y")
 
-  function onMouseEnter() {
-    d = d3.select(this).datum()
+  function onMouseEnter(d) {
     tooltip
       .attr("data-date", xAccessor(d))
     tooltip.select("#gdp")

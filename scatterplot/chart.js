@@ -83,7 +83,9 @@ async function drawScatterPlot() {
       .attr("fill", d => d.Doping? allegations : noAllegations)
       .attr("data-yvalue", d => yAccessor(d).toISOString())
       .attr("data-xvalue", d => xAccessor(d))
-      .on("mouseenter", onMouseEnter)
+      .on("mouseenter", function(e, datum) {
+        onMouseEnter(datum)
+      })
       .on("mousemove", onMouseMove)
       .on("mouseleave", onMouseLeave)
       .attr("r", 5)
@@ -115,8 +117,7 @@ async function drawScatterPlot() {
   const tooltip = d3.select("#tooltip")
     .attr("class", "tooltip")
 
-  function onMouseEnter() {
-    d = d3.select(this).datum()
+  function onMouseEnter(d) {
     tooltip.attr("data-year", xAccessor(d))
     tooltip.select("#name_nationality")
       .text(`${d.Name} (${d.Nationality})`)
