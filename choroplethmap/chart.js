@@ -108,12 +108,12 @@ async function drawChoroplethMap() {
       ${countyEducation(d.id, "area_name")},
       ${countyEducation(d.id, "state")}:
       ${countyEducation(d.id, "bachelorsOrHigher")}%`)
-    tooltip.style("opacity", 0.9)
+    tooltip.style("opacity", 0.8)
   }
 
   function onMouseMove() {
     tooltip.style("left", `${event.pageX}px`)
-    tooltip.style("top", `${event.pageY}px`)
+    tooltip.style("top", `${event.pageY - 35}px`)
   }
 
   function onMouseLeave() {

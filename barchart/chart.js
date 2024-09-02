@@ -112,8 +112,8 @@ async function drawBarChart() {
   }
 
   function onMouseMove() {
-    tooltip.style("left", `${event.pageX + 20}px`)
-    tooltip.style("top", `${event.pageY}px`)
+    tooltip.style("left", `${event.pageX + 15}px`)
+    tooltip.style("top", `${event.pageY - 65}px`)
   }
 
   function onMouseLeave() {

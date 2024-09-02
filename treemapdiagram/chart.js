@@ -108,8 +108,8 @@ async function drawTreeMapDiagram() {
   }
 
   function onMouseMove() {
-    tooltip.style("left", `${event.pageX}px`)
-    tooltip.style("top", `${event.pageY}px`)
+    tooltip.style("left", `${event.pageX - 65}px`)
+    tooltip.style("top", `${event.pageY - 85}px`)
   }
 
   function onMouseLeave() {
