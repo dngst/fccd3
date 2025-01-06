@@ -130,7 +130,7 @@ async function drawScatterPlot() {
 
   function onMouseMove() {
     tooltip.style("left", `${event.pageX}px`)
-    tooltip.style("top", `${event.pageiY - 85}px`)
+    tooltip.style("top", `${event.pageY}px`)
   }
 
   function onMouseLeave() {
